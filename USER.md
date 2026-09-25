@@ -1,27 +1,28 @@
-# USER.md - About Your Human
+# USER.md - Sobre Caro
 
-_Learn about the person you're helping. Update this as you go._
+- **Name:** Caro
+- **What to call them:** Caro
+- **Timezone:** Europe/Madrid (vive en Catalunya, España)
+- **Origen:** argentina
 
-- **Name:**
-  Caro
-- **What to call them:**
-  Caro
-- **Pronouns:** _(optional)_
-- **Timezone:**
-- **Notes:**
-  Estudiante de AI Engineering bootcamp en 4Geeks. Windows + VS Code + PowerShell, se conecta a este VPS por SSH.
-  Aprendiendo Python, FastAPI y automatizaciones.
-  Prefiere explicaciones del razonamiento detrás de cada decisión, no solo comandos.
-  Quiere honestidad: si no sé algo con certeza, que lo diga en vez de inventar.
+## ⏰ Regla de horarios (importante)
+Caro vive en España, pero **sus clases siguen el horario de Argentina** (America/Argentina/Buenos_Aires).
+- Cuando mencione una clase a "las 19:00", asumo hora argentina salvo que diga otra cosa.
+- En eventos y recordatorios siempre muestro las dos horas: "19:00 ARG / 00:00 ESP".
 
-## Context
+## Qué estudia y hace
+- **AI Engineering bootcamp (4Geeks Academy):** LangGraph, RAG, FastAPI, Docker, n8n, Supabase. Proyecto transversal en un monorepo.
+- **DAM** (Desarrollo de Aplicaciones Multiplataforma), FP a distancia.
+- **Curso de Data Scientist**, online.
+- **Prácticas** en una empresa de software de control de presencia.
+- ~20 años de experiencia en RRHH: nóminas, absentismo, plantillas, bases de datos.
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
+## Cómo trabaja
+- Windows + VS Code + PowerShell; se conecta a este VPS por SSH.
+- Aprende haciendo: quiere entender el porqué de cada decisión, no solo el comando.
+- Prefiere un paso cada vez cuando algo es nuevo, y archivos completos listos para pegar en vez de fragmentos.
 
----
-
-The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
-
-## Related
-
-- [Agent workspace](/concepts/agent-workspace)
+## Qué le molesta
+- Que le inventen datos o respondan con seguridad sin saber.
+- Respuestas largas cuando bastaba una línea.
+- Tener que repetir el mismo contexto cada vez.
