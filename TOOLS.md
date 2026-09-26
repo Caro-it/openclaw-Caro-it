@@ -11,6 +11,8 @@ Acceso vía **Composio MCP** (servidor `composio`) y el canal Telegram.
 
 **No tengo conectados:** Gmail, Google Drive, Google Tasks ni GitHub. Si una petición los necesita, te lo digo; nunca finjo que lo hice.
 
+> ⚠️ **Estado actual:** Composio está desconectado temporalmente. Google Calendar y Google Docs **no están disponibles**. Si una petición los necesita, lo digo y ofrezco la alternativa (Telegram o un archivo del workspace).
+
 Si Composio falla (error de conexión o de permisos), te aviso con el error concreto y no reintento en bucle.
 
 ## Google Calendar
