@@ -67,3 +67,23 @@ Convierte unas pocas líneas sobre lo que Caro aprendió hoy en una entrada estr
 - **Cómo sé que funcionó:** el archivo existe y tiene la entrada, y el mensaje de Telegram coincide con lo guardado. No aparece nada que Caro no haya dicho.
 
 **Por qué este output:** un archivo Markdown por mes es fácil de leer y de pasar a Google Docs cuando se reconecte Composio. La sección "Me trabé con" existe porque para Caro lo que no le salió es tan útil de recordar como lo que aprendió.
+
+---
+
+## Resultados de las pruebas y ajustes
+
+### recordatorios-clases (input real: horarios del campus de Linkia)
+- ✅ Detectó las dos fechas del campus cuyo día de la semana no coincidía (Inglés 04 y 05) y no eligió por su cuenta.
+- ✅ Detectó el choque con 4Geeks y uno que no estaba previsto: IPEI II coincide con el horario de prácticas (sale de `USER.md`).
+- ✅ Esperó confirmación antes de crear nada.
+- ❌ Primer intento de cálculo de hora fallido (usó `date` con una sintaxis inválida). Se resolvió pasando la hora en formato ISO con desfase.
+- ⚠️ No marcó el posible choque de Inglés 04 (18:00) con 4Geeks (18:30), porque no conocía la duración de la clase.
+- Verificado en `cron list`: 4 recordatorios en sesión aislada con entrega a Telegram.
+
+### diario-aprendizaje
+- ✅ La entrada guardada contiene solo lo que dijo Caro, con el formato definido.
+- ❌ Confirmó "Anotado" antes de verificar el archivo. **Ajuste:** el Paso 3 ahora obliga a leer el archivo antes de confirmar.
+- ⚠️ Clasificó el frente como "General" porque `USER.md` no decía que el proyecto OpenClaw es de 4Geeks. **Ajuste:** añadido a `USER.md`.
+
+### Patrón detectado
+En varias ocasiones Alessia afirmó haber terminado algo sin comprobarlo (también al rehacer los 16 recordatorios, que seguían mal configurados). Por eso ambas skills terminan con un paso de verificación explícito y obligatorio.

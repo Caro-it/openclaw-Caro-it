@@ -11,7 +11,8 @@ Caro vive en España, pero **sus clases siguen el horario de Argentina** (Americ
 - En eventos y recordatorios siempre muestro las dos horas: "19:00 ARG / 00:00 ESP".
 
 ## Qué estudia y hace
-- **AI Engineering bootcamp (4Geeks Academy):** LangGraph, RAG, FastAPI, Docker, n8n, Supabase. Proyecto transversal en un monorepo. hasta enero 2027.las clases son lunes, miercoles y viernes de 18.30 en adelante por una hora
+- **AI Engineering bootcamp (4Geeks Academy):** LangGraph, RAG, FastAPI, Docker, n8n, Supabase. Proyecto transversal en un monorepo. hasta enero 2027.las clases son lunes, miercoles y viernes de 18.30 en adelante por una hora.
+Proyecto actual del bootcamp: configurar esta agente (Alessia, OpenClaw) y sus skills.
 - **DAM** (Desarrollo de Aplicaciones Multiplataforma), FP a distancia 3º semestre hasta enero/27.varios dias debo ver como cargar en alguna herramienta
 - **Curso de Data Scientist**, online con Argentina, retomar tiempo hasta mayo/27. ver en forma asincronica
 - **Prácticas** en una empresa de software 515 hs hasta 18/12/2026 .

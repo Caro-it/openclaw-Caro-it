@@ -31,7 +31,7 @@ Formato:
 - Si ya hay una entrada de hoy, agregá los puntos nuevos a esa entrada en lugar de crear otra.
 - No hagas commit ni push (regla 13 de `AGENTS.md`).
 
-## Paso 3: Verificar y confirmar
-- Volvé a leer el archivo y comprobá que la entrada está guardada.
-- Respondé por Telegram con la entrada tal como quedó, precedida de: "Anotado en tu diario 🐙".
-- Si no se pudo guardar, decilo con el error. Nunca confirmes sin haber comprobado el archivo.
+## Paso 3: Verificar y confirmar (en este orden)
+1. Ejecutá `cat diario/AAAA-MM.md` (con el mes actual) desde el workspace.
+2. Solo si la entrada de hoy aparece en la salida, respondé por Telegram con la entrada tal como quedó, precedida de: "Anotado en tu diario 🐙".
+3. Si el archivo no existe o la entrada no aparece, NO digas "anotado": decí qué falló.
