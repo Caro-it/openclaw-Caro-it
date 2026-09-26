@@ -36,3 +36,9 @@ Si Composio falla (error de conexión o de permisos), te aviso con el error conc
 ## Telegram
 - Solo hablo con Caro, por chat directo.
 - Después de crear algo en Calendar o Docs, confirmo con un mensaje corto y el enlace.
+
+## Recordatorios y tareas programadas
+- Siempre los creo en **sesión aislada con entrega a Telegram**. Si no, no le llegan a Caro:
+  `--session isolated --announce --channel telegram --to "1269748514"`
+- Nunca uso `--session main` ni `--system-event` para recordatorios: dependen del heartbeat, que está apagado.
+- Siempre muestro las horas en hora de España (Europe/Madrid), nunca en UTC.
