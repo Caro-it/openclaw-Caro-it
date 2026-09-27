@@ -171,7 +171,53 @@ Escáner: `"state":"clean"`, `"critical":0`.
 **Resultado:** ✅ Funciona. Los números coinciden con la Skill 2: 16 filas pendientes menos 7 duplicados = 9.
 
 ## Skill 4 — Obtener resumen de progreso
-(mismo formato)
+
+## Skill 4 — Obtener resumen de progreso (`4geeks-course-progress`)
+
+**Prompt en lenguaje natural (27/09):**
+> Skill 3 lista. Vamos con la Skill 4: quiero una visión general de cuánto he avanzado en el curso. Revisá en `docs/4geeks-api-map.md` qué endpoint(s) sirven (por ejemplo, las tareas de todos los tipos, no solo proyectos, o mi cohorte activa) y proponeme qué métricas mostrar. Tiene que ser un resumen con números, no una lista de proyectos (eso ya lo hacen las Skills 2 y 3), y aplicando la misma deduplicación por `associated_slug`. Mostrame la propuesta antes de aplicarla.
+
+**Qué hace:** da un resumen numérico del avance:
+- porcentaje entregado sobre las tareas asignadas hasta ahora;
+- porcentaje aprobado sobre proyectos y ejercicios;
+- desglose por tipo de tarea;
+- pendientes totales;
+- duplicados excluidos;
+- nombre de las cohortes activas.
+
+No lista tareas individuales, porque eso lo hacen las Skills 2 y 3.
+
+**Endpoints:**
+- `GET /v1/assignment/user/me/task`, paginado y sin filtrar por tipo, para las tareas.
+- `GET /v1/admissions/user/me`, solo para los nombres de las cohortes con `stage=STARTED`.
+
+Ambos a través de `4geeks-get`.
+
+**Decisiones tomadas con datos reales:**
+- La deduplicación por `associated_slug` funciona en todos los tipos: 223 filas se quedan en 171 tareas únicas (52 duplicados).
+- No hay quizzes en los datos, así que se excluyen.
+- `/v1/admissions/academy/cohort/me` devolvía 403. Además, 23 cohortes figuraban como `educational_status=ACTIVE`, así que ese campo no identifica la cohorte actual. Se usa `stage=STARTED`, con el que hoy salen 2.
+- El total son las tareas **asignadas hasta ahora**, no el curso completo, porque los módulos futuros aún no aparecen.
+- Se separa "entregado" de "aprobado". Las lecciones cuentan solo como "completadas", porque ninguna aparece como aprobada (0 de 13 entregadas). Es una deducción a partir de los datos, no algo confirmado por 4Geeks. Por eso el porcentaje de aprobado se calcula solo sobre proyectos y ejercicios.
+- Todo se procesa en memoria, sin escribir en disco (ver incidencia 6).
+
+Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
+
+**Resultado de prueba (27/09, 12:49):**
+> Vas por el 58% de las tareas asignadas hasta ahora (100 de 171).
+> De los proyectos y ejercicios, el 54% ya está aprobado (72 de 134).
+>
+> Por tipo:
+> • Proyectos: 20/29 entregados (16 aprobados)
+> • Ejercicios: 67/105 entregados (56 aprobados)
+> • Lecciones: 13/37 completadas
+>
+> Pendiente: 71 no entregadas, 0 a corregir.
+> (Se excluyeron 52 duplicados entre cohortes.)
+>
+> Cohorte(s) activa(s): Ingeniería de Prompts para Principiantes, spain-aie-pt-4.
+
+**Resultado:** ✅ Funciona. Los proyectos coinciden con las Skills 2 y 3: 29 únicos, 9 pendientes.
 
 ## Skill 5 — [extendida] ...
 - **Necesidad que la motivó:**
@@ -189,5 +235,6 @@ Escáner: `"state":"clean"`, `"critical":0`.
 3. **Intento de aplicar sin enseñar la versión final.** Alessia intentó aplicar la v3 antes de mostrarla; al pedírselo, reconoció el error y mostró el contenido.
 4. **Tarjetas de aprobación caducadas.** Cada aplicación genera una tarjeta con 70 segundos para responder con `/approve <id> allow-once`. Dos caducaron sin respuesta.
 5. **Cuarentena por el escáner de seguridad.** La v3 quedó en cuarentena por la regla `secret-exfiltration` (1 hallazgo crítico): una skill que construye la cabecera `Authorization` con una variable de entorno podría enviar el token a otro destino. En lugar de reescribir el texto para esquivar el escáner, se resolvió el riesgo de fondo con el wrapper `4geeks-get`. La nueva propuesta pasó el escaneo sin hallazgos.
+6. **Datos de la API guardados en el workspace** (27/09). Mientras exploraba los datos para la Skill 4, Alessia guardó 4 archivos (unos 330 KB) con respuestas completas de la API en `.openclaw/tmp/`, dentro del repo, contradiciendo sus propias skills ("no escribe nada en disco"). Se detectó con `git status`. Se comprobó que no contenían el token, se añadió `.openclaw/` al `.gitignore` antes de que se subieran y se le pidió que los borrara y trabajara en memoria. Alessia borró los archivos tras terminar el análisis (verificado con `ls`: carpeta vacía).
 
 **Comprobación de fugas:** se buscó el valor del token en todos los archivos de `~/.openclaw`, excepto el `.env`, sin imprimirlo. Resultado: **sin coincidencias** (27/09/2026). El token solo existe en `~/.openclaw/.env`.
