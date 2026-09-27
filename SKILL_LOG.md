@@ -92,11 +92,50 @@ Escáner de la versión aplicada: `"state":"clean"`, `"critical":0`, sin hallazg
 ---
 
 ## Skill 2 — Obtener mis proyectos
-- **Prompt en lenguaje natural:**
-- **Qué hace:**
-- **Endpoint(s):**
-- **Prueba:**
-- **Resultado:**
+
+## Skill 2 — Obtener mis proyectos (`4geeks-projects-status`)
+
+**Prompt en lenguaje natural (27/09):**
+> Skill 1 lista y subida. Vamos con la Skill 2: quiero que puedas recuperar la lista de proyectos que tengo asignados en 4Geeks con su estado actual (pendiente, entregado, calificado). El mapa oficial de endpoints está en `docs/4geeks-api-map.md` del workspace. Buscá ahí el endpoint correcto, probalo con `4geeks-get` (igual que la Skill 1) y mostrame la propuesta completa antes de aplicarla. Una sola responsabilidad: solo listar proyectos y su estado.
+
+**Qué hace:** lista todos los proyectos asignados con su estado. Empieza con un recuento por estado y después los agrupa. Recorre todas las páginas de la API (`next` hasta `null`). Si aparece una combinación de estados desconocida, muestra los valores crudos en vez de inventar una interpretación.
+
+**Endpoint:** `GET /v1/assignment/user/me/task?task_type=PROJECT&limit=100&offset=<N>`, a través de `4geeks-get`.
+
+**Hallazgo con datos reales:** el estado no sale de un solo campo, sino de cruzar dos:
+
+| task_status | revision_status | Estado |
+|---|---|---|
+| PENDING | (cualquiera) | 🔴 Pendiente |
+| DONE | PENDING | 🟡 Entregado, esperando revisión |
+| DONE | APPROVED | 🟢 Calificado - Aprobado |
+| DONE | REJECTED | 🟠 Calificado - Rechazado |
+
+**Revisión antes de aplicar (v1 → v2):**
+- Se quitó "¿qué me falta entregar?" de los disparadores, porque es la pregunta de la Skill 3. Ahora la skill aclara explícitamente que no la cubre.
+- Se añadió un recuento por estado al principio, porque 36 proyectos seguidos en Telegram eran ilegibles.
+
+Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
+
+**Resultado de prueba (27/09), extracto:**
+> 🔴 16 · 🟡 4 · 🟢 16 · 🟠 0
+>
+> 🔴 Pendientes (no entregados):
+> • Command Line Challenge — spain-aie-pt-4
+> • Backend Architecture Proposal — Backend development with Coding Agents
+> • …
+>
+> 🟡 Entregados, esperando revisión:
+> • Talk to the Machine (chat con IA real) — Frontend development with Coding Agents
+> • …
+>
+> 🟢 Calificados - Aprobados:
+> • A simple Dashboard with Tailwind CSS — Web UI fundamentals with Tailwind
+> • …
+
+**Resultado:** ✅ Funciona.
+
+**Observación para la Skill 3:** varios proyectos aparecen dos veces, pendientes en la cohorte general (`spain-aie-pt-4`) y entregados o aprobados en la cohorte del módulo. La Skill 2 los muestra tal como los devuelve la API. La Skill 3 tendrá que deduplicarlos para no dar como pendiente algo ya entregado.
 
 ## Skill 3 — Obtener trabajo pendiente
 (mismo formato)
