@@ -138,7 +138,37 @@ Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
 **Observación para la Skill 3:** varios proyectos aparecen dos veces, pendientes en la cohorte general (`spain-aie-pt-4`) y entregados o aprobados en la cohorte del módulo. La Skill 2 los muestra tal como los devuelve la API. La Skill 3 tendrá que deduplicarlos para no dar como pendiente algo ya entregado.
 
 ## Skill 3 — Obtener trabajo pendiente
-(mismo formato)
+
+## Skill 3 — Obtener trabajo pendiente (`4geeks-projects-pending`)
+
+**Prompt en lenguaje natural (27/09):**
+> Skill 2 lista. Vamos con la Skill 3: quiero que me digas específicamente qué me falta completar. Ojo con algo que vimos en la Skill 2: varios proyectos aparecen dos veces (pendiente en spain-aie-pt-4 y entregado o aprobado en la cohorte del módulo). Revisá en la respuesta real qué campo identifica que son el mismo proyecto (no solo el título), y que la skill no cuente como pendiente algo que ya está entregado en otra cohorte. Una sola responsabilidad: solo lo pendiente. Mostrame la propuesta antes de aplicarla.
+
+**Qué hace:** lista solo el trabajo pendiente real. Agrupa las copias de un mismo proyecto por `associated_slug` y lo excluye si alguna copia está entregada o aprobada. Los rechazados se muestran como "🟠 a corregir", con su feedback. Termina indicando cuántos duplicados excluyó.
+
+**Endpoint:** `GET /v1/assignment/user/me/task?task_type=PROJECT&limit=100&offset=<N>`, a través de `4geeks-get`. Es el mismo endpoint que la Skill 2, pero con una responsabilidad distinta: la Skill 2 muestra el estado de todo; la Skill 3, solo lo que falta.
+
+**Problema real descubierto:** 4Geeks reasigna el mismo proyecto a la cohorte general (`spain-aie-pt-4`) con un `id` nuevo y `task_status=PENDING`, aunque ya esté entregado en la cohorte del módulo. Sin deduplicar, salían 16 pendientes; los reales son 9. El título no sirve para identificarlos; el campo fiable es `associated_slug`.
+
+**Revisión antes de aplicar (v1 → v2):** la v1 excluía cualquier proyecto con alguna copia en `DONE`, pero así un proyecto `DONE` + `REJECTED` (que hay que corregir) desaparecía de la lista. En la v2, solo se excluye si alguna copia está `DONE` + `APPROVED` o `DONE` + `PENDING`. Además se añadió la línea de duplicados excluidos.
+
+Escáner: `"state":"clean"`, `"critical":0`.
+
+**Resultado de prueba (27/09, 12:24):**
+> Te faltan 9 proyectos por resolver: 9 sin entregar, 0 a corregir.
+> 1. Backend Architecture Proposal — Backend development with Coding Agents
+> 2. Company Monorepo Containerization — Container applications with Docker
+> 3. Securing the API: Authentication and Route Restriction in FastAPI — Authentication in web applications
+> 4. EduTrack Data Audit — Managing relational databases with FastAPI
+> 5. Centralized Incident Manager — Error handling, debugging and testing
+> 6. Error Handling — Error handling, debugging and testing
+> 7. My 4Geeks Assistant — Teaching OpenClaw to Track Your Progress — Advanced personal assistants with Openclaw
+> 8. Enhacing development with agent skills - Financial dashboard — Working with AI coding agents
+> 9. Todo List CLI with Python — spain-aie-pt-4
+>
+> (Se excluyeron 7 duplicados ya entregados en otra cohorte.)
+
+**Resultado:** ✅ Funciona. Los números coinciden con la Skill 2: 16 filas pendientes menos 7 duplicados = 9.
 
 ## Skill 4 — Obtener resumen de progreso
 (mismo formato)
