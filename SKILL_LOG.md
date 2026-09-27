@@ -252,7 +252,48 @@ Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
 **Resultado:** ✅ Funciona. Durante la exploración, Alessia dijo "martes 7/10", pero el 7/10/2026 es miércoles; la skill ya aplicada lo muestra bien. Se corrigió el ejemplo del `SKILL.md`.
 
 ## Skill 6 — [extendida] ...
-(mismo formato)
+## Skill 6 — [extendida] Tiempo de un trabajo (`4geeks-task-timeline`)
+
+**Necesidad que la motivó:** quiero saber qué tiempo me llevó un trabajo concreto.
+
+**Prompt en lenguaje natural (27/09):**
+> Skill 5 lista. Skill 6: quiero saber qué tiempo me llevó un trabajo concreto (un proyecto o un ejercicio), por ejemplo "¿cuánto tiempo me llevó el Talent Pipeline Tracker?". Mirá en `docs/4geeks-api-map.md` el endpoint `/v1/activity/me` (acepta `date_start` y `date_end`). Antes de diseñar nada, probalo con datos reales y contame qué devuelve de verdad [...]. Si la API no permite saber el tiempo por trabajo, decímelo claramente y proponeme la alternativa más cercana, sin inventar números ni estimarlos a partir de fechas. [...]
+
+**Exploración con datos reales, antes de diseñar:**
+- `/v1/activity/me` devuelve **403** con el token de estudiante: exige el permiso `read_activity`, que es de staff.
+- El campo `assignment_telemetry` del detalle de tarea viene **vacío** en las 5 tareas revisadas.
+- Las rutas de telemetría probadas devuelven **404**.
+- **Conclusión:** la API no expone el tiempo trabajado por tarea a un estudiante. Alessia lo dijo claramente en lugar de inventar números.
+
+**Qué hace (la alternativa más cercana y honesta):** para un trabajo que nombro, muestra:
+- los días de calendario entre apertura y entrega, en hora de España;
+- la estimación del curso (campo `duration`, probablemente horas).
+
+Ambas cosas van siempre etiquetadas como **"no es tiempo trabajado"**. Si hay varias coincidencias, pregunta cuál. Si falta un dato, lo dice sin calcular. Entre los duplicados de distintas cohortes, usa la copia con fecha de entrega.
+
+**Endpoints:**
+- `GET /v1/assignment/user/me/task`, para `opened_at` y `delivered_at`.
+- `GET /v1/registry/asset/{slug}`, para `duration`.
+
+Ambos a través de `4geeks-get`.
+
+**Revisiones antes de aplicar:**
+- No dar por confirmada la unidad de `duration`.
+- Usar las mismas etiquetas de estado que la Skill 2.
+- Convertir las fechas a hora de España.
+
+**Corrección después de aplicar:** ver incidencia 7.
+
+Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
+
+**Resultado de prueba (27/09, 13:21):**
+> 📋 Milestone 3 — Talent Pipeline Tracker
+> Cohorte: Frontend development with Coding Agents
+> Estado: 🟡 Entregado, esperando revisión
+> 📅 Abierto el 19/9/2026 22:31 (España), entregado el 23/9/2026 01:14 (España) → 4 días de calendario (no es tiempo trabajado)
+> ⏱️ 4Geeks lo estima en 3 (campo duration, probablemente horas) (estimación del curso, no lo que vos tardaste)
+
+**Resultado:** ✅ Funciona. La conversión horaria importaba: en UTC la entrega figuraba el 22/9, y en hora de España es el 23/9.
 
 ---
 
@@ -264,5 +305,5 @@ Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
 4. **Tarjetas de aprobación caducadas.** Cada aplicación genera una tarjeta con 70 segundos para responder con `/approve <id> allow-once`. Dos caducaron sin respuesta.
 5. **Cuarentena por el escáner de seguridad.** La v3 quedó en cuarentena por la regla `secret-exfiltration` (1 hallazgo crítico): una skill que construye la cabecera `Authorization` con una variable de entorno podría enviar el token a otro destino. En lugar de reescribir el texto para esquivar el escáner, se resolvió el riesgo de fondo con el wrapper `4geeks-get`. La nueva propuesta pasó el escaneo sin hallazgos.
 6. **Datos de la API guardados en el workspace** (27/09). Mientras exploraba los datos para la Skill 4, Alessia guardó 4 archivos (unos 330 KB) con respuestas completas de la API en `.openclaw/tmp/`, dentro del repo, contradiciendo sus propias skills ("no escribe nada en disco"). Se detectó con `git status`. Se comprobó que no contenían el token, se añadió `.openclaw/` al `.gitignore` antes de que se subieran y se le pidió que los borrara y trabajara en memoria. Alessia borró los archivos tras terminar el análisis (verificado con `ls`: carpeta vacía).
-
+7. **Regla escrita y resultado real no coincidían (Skill 6).** El `SKILL.md` decía "días completos (redondeo hacia abajo)", que daría 3, pero la prueba mostró 4. Se detectó revisando el `SKILL.md` con `grep`. Se corrigió mediante una propuesta de actualización: ahora cuenta días de calendario en hora de España (del 19/9 al 23/9 = 4), y la descripción ya no da por confirmada la unidad de `duration`.
 **Comprobación de fugas:** se buscó el valor del token en todos los archivos de `~/.openclaw`, excepto el `.env`, sin imprimirlo. Resultado: **sin coincidencias** (27/09/2026). El token solo existe en `~/.openclaw/.env`.
