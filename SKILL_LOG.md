@@ -39,7 +39,7 @@ Prueba del wrapper: `4geeks-get /v1/auth/user/me` → `HTTP_STATUS:200`; `4geeks
 ## 1. Conversación de descubrimiento
 
 **Prompt inicial (26/09/2026):**
-> [PEGAR AQUÍ EL MENSAJE EXACTO QUE LE ENVIASTE A ALESSIA]
+Quiero darte la habilidad de conectarte a mi cuenta de 4Geeks usando mi token de estudiante, sin que tenga que desarrollar código de mi parte. ¿Qué debemos hacer?
 
 **Qué respondió OpenClaw (26/09, 22:48):** se negó, citando dos de sus reglas fijas de `AGENTS.md`:
 - la **regla 10**, que le prohíbe configurar conexiones o APIs nuevas;
