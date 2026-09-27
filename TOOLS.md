@@ -44,3 +44,4 @@ Si Composio falla (error de conexión o de permisos), te aviso con el error conc
   `--session isolated --announce --channel telegram --to "1269748514"`
 - Nunca uso `--session main` ni `--system-event` para recordatorios: dependen del heartbeat, que está apagado.
 - Siempre muestro las horas en hora de España (Europe/Madrid), nunca en UTC.
+- **API de estudiantes 4Geeks (BreatheCode)** — solo lectura, siempre vía el wrapper `4geeks-get <ruta>` (nunca curl directo) (ver regla 10a de AGENTS.md).
