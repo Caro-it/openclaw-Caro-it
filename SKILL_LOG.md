@@ -221,7 +221,35 @@ Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
 
 ## Skill 5 — [extendida] ...
 - **Necesidad que la motivó:**
-(mismo formato)
+
+## Skill 5 — [extendida] Próximos eventos (`4geeks-events-upcoming`)
+
+**Necesidad que la motivó:** no quiero perderme workshops por no revisar el campus.
+
+**Prompt en lenguaje natural (27/09):**
+> Skill 4 lista. Ahora las extendidas. Skill 5: no quiero perderme workshops por no revisar el campus. Quiero saber qué eventos de 4Geeks vienen (workshops, charlas). Mirá en `docs/4geeks-api-map.md` el endpoint de eventos (`/v1/events/all`, con `upcoming` y `academy`). Sacá mi ID de academia de mis datos reales, sin suponerlo. Mostrá solo los próximos, con título, fecha y hora convertidas a hora de España, y el tipo o enlace si viene. Si no hay eventos próximos, decilo claramente. Solo lectura, en memoria, sin guardar nada en disco. Probalo con datos reales y mostrame la propuesta antes de aplicarla.
+
+**Qué hace:** lista los próximos eventos de 4Geeks con título, fecha y hora en España (de UTC a Europe/Madrid, teniendo en cuenta el cambio de hora), tipo, modalidad y enlace, o avisa si no lo hay. Si no hay eventos, lo dice claramente.
+
+**Endpoint:** `GET /v1/events/all?upcoming=true`, a través de `4geeks-get`.
+
+**Hallazgo con datos reales:** filtrando por mi academia (Madrid, `id=6`, obtenido de mis datos) salían **0 eventos**, porque 4Geeks publica los eventos online en una academia global (`id=47`). Por eso se pide sin filtro y se filtra en memoria:
+- **Online:** de cualquier academia.
+- **Presencial:** solo si es de Madrid.
+
+Esta regla la decidí yo, y la skill indica que no puede cambiarse sin mi confirmación.
+
+Escáner: `"state":"clean"`, `"critical":0`. Estado: `applied`.
+
+**Resultado de prueba (27/09, 13:03):**
+> Próximos eventos de 4Geeks:
+> 📅 El mapa real del AI Engineer
+> Miércoles 7/10 · 19:00 a 20:15 España
+> Tipo: Tendencias de IA (Público)
+> Modalidad: online
+> Enlace: sin enlace en la API — probablemente hay que anotarse desde la plataforma del campus.
+
+**Resultado:** ✅ Funciona. Durante la exploración, Alessia dijo "martes 7/10", pero el 7/10/2026 es miércoles; la skill ya aplicada lo muestra bien. Se corrigió el ejemplo del `SKILL.md`.
 
 ## Skill 6 — [extendida] ...
 (mismo formato)
